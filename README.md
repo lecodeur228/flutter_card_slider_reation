@@ -1,16 +1,9 @@
 # flutter_card_slider_reaction
 
-A new Flutter project.
+![Capture d'écran 2024-04-01 004650](https://github.com/lecodeur228/flutter_card_slider_reation/assets/92242447/b1fefaa3-108a-4a64-ab65-f3a8b1c573a5)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+https://github.com/lecodeur228/flutter_card_slider_reation/assets/92242447/392d8604-c8af-4ad2-9304-8f445cf376cf
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
