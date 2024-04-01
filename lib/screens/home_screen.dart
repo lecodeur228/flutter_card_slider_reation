@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -9,18 +10,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final CarouselController _controller = CarouselController();
+
   List<Map<String, String>> data = [
     {
       "image": "assets/bad.png",
       "text": "Bad",
+      "lottie": "assets/lotties/bad.json"
     },
     {
       "image": "assets/good.png",
       "text": "Good",
+      "lottie": "assets/lotties/good.json"
     },
     {
       "image": "assets/amazing.png",
-      "text": "amazing",
+      "text": "Amazing",
+      "lottie": "assets/lotties/amazing.json"
     },
   ];
   List<Map<String, dynamic>> menuData = [
@@ -60,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Review your order",
+          "Slider reaction",
           style: TextStyle(
               color: Colors.black,
               fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
@@ -78,17 +84,22 @@ class _HomeScreenState extends State<HomeScreen> {
               for (int i = 0; i < data.length; i++)
                 Column(
                   children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 15),
-                      height: 70,
-                      width: 70,
-                      padding: const EdgeInsets.all(15),
-                      decoration: const BoxDecoration(
-                          color: Color(0xffE3EEEC), shape: BoxShape.circle),
-                      child: Image.asset(
-                        data[i]["image"]!,
-                        width: 30,
-                        height: 30,
+                    InkWell(
+                      onTap: () {
+                        showLottieDialog(context, data[i]["lottie"]!);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        height: 70,
+                        width: 70,
+                        padding: const EdgeInsets.all(15),
+                        decoration: const BoxDecoration(
+                            color: Color(0xffE3EEEC), shape: BoxShape.circle),
+                        child: Image.asset(
+                          data[i]["image"]!,
+                          width: 30,
+                          height: 30,
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -103,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: MediaQuery.sizeOf(context).height * 0.1,
           ),
           CarouselSlider(
+            carouselController: _controller,
             options: CarouselOptions(
               height: 400.0,
               enlargeCenterPage: true,
@@ -112,12 +124,67 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (BuildContext context) {
                   return Container(
                     // margin: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(15),
                     height: MediaQuery.sizeOf(context).height * 0.5,
                     width: MediaQuery.sizeOf(context).width * 0.8,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white
+                              .withOpacity(0.2), // Couleur de l'ombre
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3), // Position de l'ombre
+                        ),
+                      ],
                       image: DecorationImage(
-                          image: NetworkImage(i["image"]), fit: BoxFit.cover),
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.5), BlendMode.overlay),
+                          image: NetworkImage(i["image"]),
+                          fit: BoxFit.cover),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              i["name"],
+                              style: TextStyle(
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .fontSize,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              "\$${i["price"]}",
+                              style: TextStyle(
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .fontSize,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          i["resto"],
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .fontSize,
+                              color: Colors.white70),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
                   );
                 },
@@ -126,6 +193,31 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
+    );
+  }
+
+  void showLottieDialog(BuildContext context, String lottieFile) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        Future.delayed(const Duration(seconds: 3), () {
+          _controller.nextPage(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.ease,
+          );
+          Navigator.of(context).pop();
+        });
+
+        return AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: SizedBox(
+            width: 300, //
+            height: 300, //
+            child: Lottie.asset(lottieFile),
+          ),
+        );
+      },
     );
   }
 }
